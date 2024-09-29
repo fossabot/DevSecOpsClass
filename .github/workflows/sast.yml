@@ -42,24 +42,31 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: Build with Maven
-        run: mvn clean package -B -Dmaven.test.skip                
+        run: mvn clean package -B -Dmaven.test.skip
+
       - name: Cache build
         id: cache-build
         uses: actions/cache@v3
         with:
           path: target
           key: ${{ runner.os }}-target
+
+
       - name: Cache m2
         id: cache-deps
         uses: actions/cache@v3
         with:
           path: ~/.m2/**/*.jar
           key: ${{ runner.os }}-m2
+
+
       - name: Upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: target
           path: ${{github.workspace}}/target
+
+
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v2
         with:
@@ -73,9 +80,13 @@ jobs:
       actions: read
       contents: read
       security-events: write
+
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
+
+
     - name: Run SpotBugs action
       uses: jmservera/spotbugs-github-action@v0.1.0-alpha
       with:
@@ -83,11 +94,15 @@ jobs:
         target: ./target
         dependenciesPath: ~/.m2
         basePath: src/main/java
+
+
     - name: Upload SpotBugs report
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: spotbugs.sarif
         path: ${{github.workspace}}/results.sarif
+
+
     - name: Upload analysis results to GitHub Security tab
       if: always()
       uses: github/codeql-action/upload-sarif@v2.1.28
@@ -122,11 +137,12 @@ jobs:
            # Uncomment SEMGREP_TIMEOUT to set this job's timeout (in seconds): Default timeout is 1800 seconds (30 minutes). 0=disable
            # SEMGREP_TIMEOUT: 300
       - name: Upload Semgrep Report
-        uses: actions/upload-artifact@v3.1.0
+        uses: actions/upload-artifact@v3
         if: always()
         with:
           name: semgrep.sarif
           path: ${{github.workspace}}/results.sarif
+          
       - name: Upload analysis results to GitHub Security tab
         if: always()
         uses: github/codeql-action/upload-sarif@v2.1.28

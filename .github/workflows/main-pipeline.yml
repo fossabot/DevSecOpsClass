@@ -41,6 +41,13 @@ jobs:
   #   uses: ./.github/workflows/license-compliance.yml
   #   secrets: inherit
 
+  license-compliance:
+    needs: build
+    name: License compliance
+    uses: ./.github/workflows/license-compliance-test.yml
+    secrets: inherit
+
+
 #   docker:
 #     needs: build
 #     name: Build docker image

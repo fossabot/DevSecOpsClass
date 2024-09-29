@@ -10,7 +10,7 @@ jobs:
     # required to fix an issue we had when test results failed because
     # checks: write and pull-requests: write were needed
     permissions:
-    #  contents: read
+      contents: read
       issues: read
       checks: write
       pull-requests: write

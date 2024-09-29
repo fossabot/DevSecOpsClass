@@ -15,12 +15,12 @@ jobs:
         run: mvn clean install -U
 
       - name: 'Run FOSSA Scan'
-        uses: fossas/fossa-action@v1.1.3 # Bloquea la versión para estabilidad
+        uses: fossas/fossa-action@main # Bloquea la versión para estabilidad
         with:
           api-key: ${{ secrets.fossaApiKey }}
 
       - name: 'Run FOSSA Test'
-        uses: fossas/fossa-action@v1.1.3
+        uses: fossas/fossa-action@main
         with:
           api-key: ${{ secrets.fossaApiKey }}
           run-tests: true

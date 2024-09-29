@@ -1,4 +1,6 @@
 # How to build a DevSecOps Pipeline in GitHub
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fcodernarvaez%2FDevSecOpsClass.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fcodernarvaez%2FDevSecOpsClass?ref=badge_shield)
+
 This repository shows you how to build up an enterprise-ready DevSecOps Pipeline with GitHub. 
 It is part of your video series on how to build a DevSecOps Pipeline with GitHub and GitLab.
 
@@ -15,3 +17,7 @@ Here is the link to the blog-post: https://www.romanoroth.com/post/gitlab-vs-git
 
 
 Link to the GitLab repository: https://gitlab.com/romano_roth/gitlabdevsecopspipeline
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fcodernarvaez%2FDevSecOpsClass.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fcodernarvaez%2FDevSecOpsClass?ref=badge_large)

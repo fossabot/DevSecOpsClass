@@ -1,49 +1,42 @@
-name: 30 License Compliance
+name: 30 License Compliance with FOSSA
 
 on:
   workflow_dispatch:
   workflow_call:
 
 jobs:
-  license-finder:
-    # Usando https://github.com/pivotal/LicenseFinder
+  fossa-scan:
     runs-on: ubuntu-latest
     steps:
       - name: 'Checkout Repository'
         uses: actions/checkout@v3
 
-      - name: 'License Finder fix with mvnw (optional)'
-        run: rm -f mvnw  # Asegúrate de que esto sea necesario. Si no lo es, puedes eliminar este paso.
+      - name: 'Force Maven dependency update'
+        run: mvn clean install -U
 
-      - name: 'Run License Finder'
-        uses: jmservera/license-finder-action@v0.1.4-alpha
+      - name: 'Run FOSSA Scan'
+        uses: fossas/fossa-action@v1.1.3 # Bloquea la versión para estabilidad
         with:
-          permitted-licenses: MIT,Apache-2.0,BSD,EPL-1.0
-          approved-dependencies: |
-            hamcrest,hamcrest-core,hamcrest-library
-            junit-jupiter,junit-jupiter-api,junit-jupiter-engine,javax.annotation-api
+          api-key: ${{ secrets.fossaApiKey }}
 
-      # Agregar un paso para verificar si el archivo report.xml se generó
-      - name: 'Check if license_finder_report.xml exists'
+      - name: 'Run FOSSA Test'
+        uses: fossas/fossa-action@v1.1.3
+        with:
+          api-key: ${{ secrets.fossaApiKey }}
+          run-tests: true
+
+      - name: 'Check FOSSA Report Exists'
         run: |
-          if [ -f "${{ github.workspace }}/license_finder_report.xml" ]; then
+          if [ -f "${{ github.workspace }}/fossa_report.xml" ]; then
             echo "Report exists."
           else
             echo "Report does not exist." && exit 1
           fi
 
-      # Este paso solo se ejecutará si el archivo existe (gracias al paso anterior)
-      - name: 'Publish Test Results'
-        uses: EnricoMi/publish-unit-test-result-action@v2.0.0
-        if: always()
+      - name: 'Upload FOSSA Report'
+        if: success()
+        uses: actions/upload-artifact@v3
         with:
-          junit_files: "license_finder_report.xml"
-          check_name: "License Compliance Check"
+          name: fossa-report
+          path: ${{ github.workspace }}/fossa_report.xml
 
-      # Subir el archivo si fue generado
-      - name: 'Upload Dependency Review Report'
-        if: always()
-        uses: actions/upload-artifact@v2
-        with:
-          name: license-finder-report
-          path: ${{ github.workspace }}/license_finder_report.xml

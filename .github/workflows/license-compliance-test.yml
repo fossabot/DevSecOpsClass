@@ -16,7 +16,7 @@ jobs:
         run: rm -f mvnw  # Asegúrate de que esto sea necesario. Si no lo es, puedes eliminar este paso.
 
       - name: 'Run License Finder'
-        uses: jmservera/license-finder-action@main
+        uses: jmservera/license-finder-action@v0.1.4-alpha
         with:
           permitted-licenses: MIT,Apache-2.0,BSD,EPL-1.0
           approved-dependencies: |
@@ -34,16 +34,16 @@ jobs:
 
       # Este paso solo se ejecutará si el archivo existe (gracias al paso anterior)
       - name: 'Publish Test Results'
-        if: success()
-        uses: EnricoMi/publish-unit-test-result-action@v2.2.0
+        uses: EnricoMi/publish-unit-test-result-action@v2.0.0
+        if: always()
         with:
           junit_files: "license_finder_report.xml"
           check_name: "License Compliance Check"
 
       # Subir el archivo si fue generado
       - name: 'Upload Dependency Review Report'
-        if: success()
-        uses: actions/upload-artifact@v3
+        if: always()
+        uses: actions/upload-artifact@v2
         with:
           name: license-finder-report
           path: ${{ github.workspace }}/license_finder_report.xml
